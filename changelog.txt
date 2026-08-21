@@ -1,0 +1,31 @@
+RegistryDesk 0.3.0
+==================
+
+- Registry table now combines unit number and type into one `№` column (`1 кв.`, `192-2 прим.`).
+- Sorting the combined `№` column uses property type and natural unit number together, with apartments before premises.
+- PDF export now renders ownership shares as exact fractions (`1`, `1/3`, `11/20`) instead of decimal values.
+- Rewrote README.md as a user-facing Ukrainian GitHub README.
+
+RegistryDesk 0.2.0
+==================
+
+- Added PDF export with selectable fields and grouped apartment/premises sections.
+- Added CSV export with UTF-8 BOM, semicolon delimiter, and calculated values.
+- PDF export rounds `Загальна площа`, `Площа у власності`, and `Частка` to two decimals.
+- CSV export uses compact decimal values with up to 12 meaningful decimal places for recurring fractions.
+- XLSX `Загальна площа`, `Площа у власності`, and `Частка` now display with two decimal places while preserving formulas.
+- Export dialog now selects XLSX, PDF, or CSV in addition to fields and field order.
+- Registry table sorting is human-friendly: embedded numbers sort numerically and Ukrainian names use Ukrainian alphabet order.
+- Switched from deprecated `fitz` import to `pymupdf`.
+
+RegistryDesk 0.1.0
+==================
+
+- Initial PySide6 desktop application.
+- Immutable import of CNAP property-registry PDF extracts.
+- SQLite storage of full extracted page text plus normalized property and ownership records.
+- Registry list: add, open, export, delete.
+- Read-only registry table with live all-column search and sorting.
+- XLSX export dialog with available/selected field lists and field reordering.
+- Grouped XLSX output with apartment/premises sections, merged property-level cells,
+  exact share formulas, ownership-area formulas, and total area.
