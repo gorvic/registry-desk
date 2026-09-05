@@ -1,4 +1,4 @@
-from registrydesk.utils.sorting import (
+from registrydesk.common.sorting import (
     natural_text_key,
     property_unit_sort_key,
     ukrainian_text_key,

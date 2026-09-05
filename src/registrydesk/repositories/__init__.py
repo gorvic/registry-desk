@@ -1,5 +1,5 @@
 """Repository exports."""
 
-from registrydesk.repositories.sqlite_registry import SQLiteRegistryRepository
+from registrydesk.repositories.registry import SQLiteRegistryRepository
 
 __all__ = ["SQLiteRegistryRepository"]

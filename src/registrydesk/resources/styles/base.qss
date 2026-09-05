@@ -1,0 +1,23 @@
+QWidget {
+    font-size: 10pt;
+}
+QWidget[pageTitle="true"] {
+    font-size: 18pt;
+    font-weight: 600;
+}
+QWidget[registryTitle="true"] {
+    font-size: 16pt;
+    font-weight: 600;
+}
+QPushButton {
+    padding: 6px 10px;
+}
+QLineEdit, QListWidget, QTableView {
+    padding: 4px;
+}
+QTableView {
+    gridline-color: palette(mid);
+}
+QHeaderView::section {
+    padding: 6px;
+}

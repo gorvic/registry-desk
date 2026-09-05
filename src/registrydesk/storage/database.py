@@ -1,7 +1,5 @@
 """SQLite connection and migration management."""
 
-from __future__ import annotations
-
 import sqlite3
 from contextlib import closing, contextmanager
 from pathlib import Path
@@ -17,11 +15,14 @@ class Database:
         self.path = Path(path)
 
     def initialize(self) -> None:
+        """Create the database directory and apply pending forward migrations."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with closing(self.connect()) as connection:
             current = int(connection.execute("PRAGMA user_version").fetchone()[0])
             for migration in MIGRATIONS:
                 if migration.version <= current:
+                    # ``user_version`` is the entire migration state for this
+                    # local SQLite utility; already-applied scripts stay inert.
                     continue
                 try:
                     connection.executescript(
@@ -35,6 +36,7 @@ class Database:
                 current = migration.version
 
     def connect(self) -> sqlite3.Connection:
+        """Open a configured SQLite connection with rows addressable by name."""
         connection = sqlite3.connect(self.path)
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
@@ -43,6 +45,7 @@ class Database:
 
     @contextmanager
     def transaction(self) -> Iterator[sqlite3.Connection]:
+        """Yield one explicit transaction that commits or rolls back as a unit."""
         connection = self.connect()
         try:
             connection.execute("BEGIN")

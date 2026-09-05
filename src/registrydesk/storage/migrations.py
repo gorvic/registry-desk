@@ -7,6 +7,8 @@ from registrydesk.storage.schema import SCHEMA_SQL
 
 @dataclass(frozen=True, slots=True)
 class Migration:
+    """One monotonic SQLite ``PRAGMA user_version`` migration."""
+
     version: int
     sql: str
 

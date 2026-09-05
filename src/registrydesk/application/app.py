@@ -1,66 +1,46 @@
-"""Application use cases."""
-
-from __future__ import annotations
+"""Thin GUI-facing application facade."""
 
 from pathlib import Path
 
+from registrydesk.domain.exporting import ExportFormat
 from registrydesk.domain.registry import RegistryDetails, RegistrySummary
-from registrydesk.repositories import SQLiteRegistryRepository
-from registrydesk.services import CnapPdfImporter, CsvExporter, PdfExporter, XlsxExporter
+from registrydesk.services.registry import RegistryService
 
 
 class RegistryApplication:
-    """Coordinate immutable registry imports, reads, deletes, and exports."""
+    """GUI-facing facade for RegistryDesk use cases.
 
-    def __init__(
-        self,
-        repository: SQLiteRegistryRepository,
-        importer: CnapPdfImporter,
-        xlsx_exporter: XlsxExporter,
-        csv_exporter: CsvExporter,
-        pdf_exporter: PdfExporter,
-    ) -> None:
-        self._repository = repository
-        self._importer = importer
-        self._exporters = {
-            "xlsx": xlsx_exporter,
-            "csv": csv_exporter,
-            "pdf": pdf_exporter,
-        }
+    The interface layer depends on this facade and domain contracts only.
+    Repository, SQLite, parser and presentation details stay below the
+    application boundary so the GUI remains independent from implementation
+    choices in lower layers.
+    """
+
+    def __init__(self, registry: RegistryService) -> None:
+        self._registry = registry
 
     def import_pdf(self, path: Path) -> int:
-        draft = self._importer.parse(path)
-        return self._repository.create(draft)
+        """Import one supported registry PDF and return its persistent id."""
+        return self._registry.import_pdf(path)
 
     def list_registries(self) -> list[RegistrySummary]:
-        return self._repository.list_summaries()
+        """Return lightweight summaries for the registry start page."""
+        return self._registry.list_registries()
 
     def get_registry(self, registry_id: int) -> RegistryDetails | None:
-        return self._repository.get_details(registry_id)
+        """Return the normalized read view for one imported registry."""
+        return self._registry.get_registry(registry_id)
 
     def delete_registry(self, registry_id: int) -> None:
-        self._repository.delete(registry_id)
+        """Delete an imported registry snapshot and all of its child rows."""
+        self._registry.delete_registry(registry_id)
 
     def export(
         self,
         registry_id: int,
-        export_format: str,
+        export_format: ExportFormat,
         field_keys: tuple[str, ...],
         path: Path,
     ) -> None:
-        registry = self._repository.get_details(registry_id)
-        if registry is None:
-            raise ValueError("Реєстр не знайдено.")
-        exporter = self._exporters.get(export_format)
-        if exporter is None:
-            raise ValueError(f"Непідтримуваний формат експорту: {export_format}")
-        exporter.export(registry, field_keys, path)
-
-    def export_xlsx(self, registry_id: int, field_keys: tuple[str, ...], path: Path) -> None:
-        self.export(registry_id, "xlsx", field_keys, path)
-
-    def export_csv(self, registry_id: int, field_keys: tuple[str, ...], path: Path) -> None:
-        self.export(registry_id, "csv", field_keys, path)
-
-    def export_pdf(self, registry_id: int, field_keys: tuple[str, ...], path: Path) -> None:
-        self.export(registry_id, "pdf", field_keys, path)
+        """Export a selected registry view using the requested field order."""
+        self._registry.export(registry_id, export_format, field_keys, path)

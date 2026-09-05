@@ -12,7 +12,10 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+*.spec
 *.exe
+*.zip
+build.cmd
 
 # Test and tooling caches
 .pytest_cache/
@@ -22,5 +25,6 @@ dist/
 htmlcov/
 
 # IDE
+.archive/
 .idea/
 .vscode/

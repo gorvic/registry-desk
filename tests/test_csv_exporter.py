@@ -1,12 +1,10 @@
-from __future__ import annotations
-
 import csv
 from decimal import Decimal
 from fractions import Fraction
 from pathlib import Path
 
 from registrydesk.domain.registry import RegistryDetails, RegistryRow
-from registrydesk.services.csv_exporter import CsvExporter
+from registrydesk.presentation.csv import CsvExporter
 
 
 def _row(owner: str, share: Fraction) -> RegistryRow:

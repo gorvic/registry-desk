@@ -1,1 +1,1 @@
-"""GUI interfaces package."""
+"""User-interface adapters."""

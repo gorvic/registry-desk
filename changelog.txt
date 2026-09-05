@@ -1,10 +1,33 @@
+RegistryDesk 0.5.0
+==================
+
+- Completed architecture/stability refactor.
+- Established explicit `interfaces -> application -> services -> repositories -> storage` dependency direction while keeping standard-library sqlite3 storage.
+- Added `common`, `config`, `presentation`, structured `services/importing` and `services/exporting`, and `interfaces/gui` subpackages.
+- Moved XLSX/PDF/CSV rendering to presentation and kept PyMuPDF/openpyxl/ReportLab outside the normal startup import graph.
+- Centralized GUI geometry and typed table-column contracts.
+- Added startup-only THEME setting with `system` (default), `light`, and `dark`; added `.env.example` and separated base/light/dark QSS resources.
+- Reduced MainWindow to shell/wiring and moved registry GUI workflow to RegistryController.
+- Added semantic error contracts and centralized export validation.
+- Removed Pickle export, snapshot repository path, UI option, implementation, tests and documentation.
+- Removed postponed annotations and duplicate repository sorting helpers.
+- Added startup/settings/architecture regression tests.
+- Completed public-source documentation pass: all production modules/classes and public methods now have role/contract docstrings; parser, repository, storage, export and startup code include WHY-comments for non-obvious invariants and deferred-dependency decisions.
+
+RegistryDesk 0.4.0
+==================
+
+- Added lossless Pickle (.pkl) export for the complete parsed registry snapshot.
+- Pickle export includes registry metadata, extracted page text, all source-level properties and ownership records, raw fields, and the normalized owner view.
+- Pickle payload uses built-in containers plus standard-library Decimal/Fraction values, so another Python application can load it without RegistryDesk domain classes.
+- Export-field selection is disabled for Pickle because the format always saves the entire registry.
+
 RegistryDesk 0.3.0
 ==================
 
 - Registry table now combines unit number and type into one `№` column (`1 кв.`, `192-2 прим.`).
 - Sorting the combined `№` column uses property type and natural unit number together, with apartments before premises.
 - PDF export now renders ownership shares as exact fractions (`1`, `1/3`, `11/20`) instead of decimal values.
-- Rewrote README.md as a user-facing Ukrainian GitHub README.
 
 RegistryDesk 0.2.0
 ==================
@@ -21,7 +44,7 @@ RegistryDesk 0.2.0
 RegistryDesk 0.1.0
 ==================
 
-- Initial PySide6 desktop application.
+- Initial desktop application.
 - Immutable import of CNAP property-registry PDF extracts.
 - SQLite storage of full extracted page text plus normalized property and ownership records.
 - Registry list: add, open, export, delete.

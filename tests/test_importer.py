@@ -1,8 +1,6 @@
-from __future__ import annotations
-
 from pathlib import Path
 
-from registrydesk.services.pdf_importer import CnapPdfImporter
+from registrydesk.services.importing.pdf_importer import CnapPdfImporter
 
 
 PDF_TEXT = """RRP-TEST
@@ -78,7 +76,7 @@ class FakeDocument:
 def test_importer_parses_supported_registry(monkeypatch, tmp_path: Path) -> None:
     source = tmp_path / "test.pdf"
     source.write_bytes(b"fake")
-    monkeypatch.setattr("registrydesk.services.pdf_importer.pymupdf.open", lambda _path: FakeDocument())
+    monkeypatch.setattr("registrydesk.services.importing.pdf_importer.pymupdf.open", lambda _path: FakeDocument())
 
     result = CnapPdfImporter().parse(source)
 

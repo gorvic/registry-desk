@@ -1,4 +1,4 @@
-"""Application exports."""
+"""Application facade exports."""
 
 from registrydesk.application.app import RegistryApplication
 
