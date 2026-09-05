@@ -133,9 +133,8 @@ class RegistryRow:
     @property
     def share_text(self) -> str:
         """Render the exact ownership share without decimal precision loss."""
-        if self.share.denominator == 1:
-            return str(self.share.numerator)
-        return f"{self.share.numerator}/{self.share.denominator}"
+        return str(self.share.numerator) if self.share.denominator == 1 \
+            else f"{self.share.numerator}/{self.share.denominator}"
 
 
 @dataclass(frozen=True, slots=True)

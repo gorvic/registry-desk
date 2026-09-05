@@ -87,7 +87,7 @@ dark
 
 Значення за замовчуванням — `system`. Runtime-перемикання теми навмисно відсутнє.
 
-Для локального налаштування скопіюйте `.env.example` у `.env`. Файл `.env` не повинен комітитися в репозиторій.
+Для локального налаштування скопіюйте `.env.example` у `.env`.
 
 ## Встановлення для розробки
 
@@ -152,34 +152,6 @@ GUI не імпортує services/repositories/storage/presentation напря�
 
 Докладніше див. `ARCHITECTURE.md`.
 
-## Документування коду
-
-RegistryDesk готується як відкритий source-проєкт, тому production-код документується не лише через назви модулів. Публічні класи та methods мають docstrings із responsibility/contract, а comments використовуються для пояснення причин, invariants і parser/storage/export рішень, які неочевидні з самого коду.
-
-Принцип простий: **docstring пояснює що гарантує компонент і де його responsibility; comment пояснює чому конкретне рішення існує**. Коментарі не дублюють очевидні оператори Python.
-
-## Геометрія GUI
-
-Стабільні значення розмірів вікон, колонок і технічних кнопок централізовані в:
-
-```text
-interfaces/gui/geometry.py
-```
-
-Qt behavior лишається у власниках widgets/pages. Geometry module містить лише значення, а не runtime-логіку.
-
-## Startup
-
-Startup path створює GUI, SQLite gateway, repository та lightweight services. Heavy stacks не завантажуються завчасно:
-
-```text
-Import PDF  → PyMuPDF
-Export XLSX → openpyxl
-Export PDF  → ReportLab
-```
-
-Це важливо і для запуску з source tree, і для майбутнього packaged executable. Lazy imports є звичайними статично видимими Python imports усередині конкретних methods, без `importlib`/строкових module names.
-
 ## Тести
 
 ```powershell
@@ -187,15 +159,6 @@ pytest
 ```
 
 Тести покривають parser, repository aggregation, sorting, XLSX/PDF/CSV output, `.env` theme settings, startup dependency graph і структурні architecture guards.
-
-## Збірка
-
-`build.cmd` використовує PyInstaller `--onefile` і додає каталог `registrydesk/resources` у packaged application. Перед публікацією executable рекомендується окремий Windows smoke-test:
-
-- startup з `THEME=system/light/dark`;
-- імпорт PDF;
-- перший XLSX/PDF/CSV export;
-- повторний запуск із уже створеною `.data/registrydesk.db`.
 
 ## Поточні межі
 
